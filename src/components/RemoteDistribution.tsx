@@ -26,8 +26,8 @@ export const RemoteDistribution = ({ data }: RemoteDistributionProps) => {
   ].filter(d => d.value > 0);
 
   return (
-    <div className="chart-container">
-      <h3 className="text-lg font-semibold mb-4">Work Type Distribution</h3>
+    <div className="chart-container overflow-hidden">
+      <h3 className="text-lg font-semibold mb-4 gradient-text">Work Type Distribution</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie

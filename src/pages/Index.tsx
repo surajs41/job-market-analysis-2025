@@ -16,7 +16,8 @@ const Index = () => {
   const [filters, setFilters] = useState({
     experienceLevel: 'all',
     location: 'all',
-    industry: 'all'
+    industry: 'all',
+    role: 'all'
   });
 
   useEffect(() => {
@@ -48,6 +49,9 @@ const Index = () => {
     if (filters.industry !== 'all') {
       filtered = filtered.filter(job => job.industry === filters.industry);
     }
+    if (filters.role !== 'all') {
+      filtered = filtered.filter(job => job.job_title === filters.role);
+    }
     
     setFilteredData(filtered);
   }, [filters, data]);
@@ -60,16 +64,18 @@ const Index = () => {
     setFilters({
       experienceLevel: 'all',
       location: 'all',
-      industry: 'all'
+      industry: 'all',
+      role: 'all'
     });
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading AI job market data...</p>
+      <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-secondary/20"></div>
+        <div className="text-center relative z-10">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto mb-4 shadow-[var(--shadow-glow)]"></div>
+          <p className="text-muted-foreground text-lg">Loading AI job market data...</p>
         </div>
       </div>
     );
@@ -82,18 +88,26 @@ const Index = () => {
   const remoteJobs = filteredData.filter(job => job.remote_ratio === 100).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/10"></div>
+        <div className="absolute top-0 -left-4 w-96 h-96 bg-primary/30 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
+        <div className="absolute top-0 -right-4 w-96 h-96 bg-secondary/30 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute -bottom-8 left-20 w-96 h-96 bg-accent/30 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{ animationDelay: '2s' }}></div>
+      </div>
+
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+      <header className="glass-effect border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-gradient-to-br from-primary to-accent p-3">
-              <TrendingUp className="h-6 w-6 text-primary-foreground" />
+            <div className="rounded-xl bg-gradient-to-br from-primary via-secondary to-accent p-3 shadow-lg animate-pulse-glow">
+              <TrendingUp className="h-7 w-7 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold gradient-text">AI Job Market Analytics</h1>
+              <h1 className="text-3xl font-bold gradient-text">AI Job Market Analytics</h1>
               <p className="text-sm text-muted-foreground">
-                Analyzing {filteredData.length.toLocaleString()} of {data.length.toLocaleString()} jobs
+                Analyzing <span className="text-primary font-semibold">{filteredData.length.toLocaleString()}</span> of <span className="font-semibold">{data.length.toLocaleString()}</span> jobs
               </p>
             </div>
           </div>

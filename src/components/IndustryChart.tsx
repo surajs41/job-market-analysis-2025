@@ -21,8 +21,8 @@ const COLORS = [
 
 export const IndustryChart = ({ data }: IndustryChartProps) => {
   return (
-    <div className="chart-container">
-      <h3 className="text-lg font-semibold mb-4">Jobs by Industry</h3>
+    <div className="chart-container overflow-hidden">
+      <h3 className="text-lg font-semibold mb-4 gradient-text">Jobs by Industry</h3>
       <ResponsiveContainer width="100%" height={350}>
         <PieChart>
           <Pie

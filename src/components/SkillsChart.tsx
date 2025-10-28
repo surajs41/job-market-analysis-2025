@@ -18,8 +18,8 @@ const COLORS = [
 
 export const SkillsChart = ({ data }: SkillsChartProps) => {
   return (
-    <div className="chart-container">
-      <h3 className="text-lg font-semibold mb-4">Top In-Demand Skills</h3>
+    <div className="chart-container overflow-hidden">
+      <h3 className="text-lg font-semibold mb-4 gradient-text">Top In-Demand Skills</h3>
       <ResponsiveContainer width="100%" height={350}>
         <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
