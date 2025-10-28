@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { JobData, parseCSV, getTopSkills, getSalaryByExperience, getIndustryDistribution, calculateAverageSalary } from "@/lib/dataParser";
+import { JobData, parseCSV, getTopSkills, getSalaryByExperience, getIndustryDistribution, calculateAverageSalary, getUniqueCompanies, getUniqueLocations, getUniqueIndustries, getEducationDistribution } from "@/lib/dataParser";
 import { StatCard } from "@/components/StatCard";
 import { FilterPanel } from "@/components/FilterPanel";
 import { SalaryChart } from "@/components/SalaryChart";
 import { SkillsChart } from "@/components/SkillsChart";
 import { IndustryChart } from "@/components/IndustryChart";
 import { RemoteDistribution } from "@/components/RemoteDistribution";
-import { Briefcase, DollarSign, TrendingUp, Users } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Briefcase, DollarSign, TrendingUp, Users, Building2, MapPin, GraduationCap, Factory } from "lucide-react";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -86,6 +87,10 @@ const Index = () => {
   const salaryByExperience = getSalaryByExperience(filteredData);
   const industryDistribution = getIndustryDistribution(filteredData, 8);
   const remoteJobs = filteredData.filter(job => job.remote_ratio === 100).length;
+  const uniqueCompanies = getUniqueCompanies(filteredData);
+  const uniqueLocations = getUniqueLocations(filteredData);
+  const uniqueIndustries = getUniqueIndustries(filteredData);
+  const educationDist = getEducationDistribution(filteredData);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -100,16 +105,19 @@ const Index = () => {
       {/* Header */}
       <header className="glass-effect border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-gradient-to-br from-primary via-secondary to-accent p-3 shadow-lg animate-pulse-glow">
-              <TrendingUp className="h-7 w-7 text-primary-foreground" />
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-gradient-to-br from-primary via-secondary to-accent p-3 shadow-lg animate-pulse-glow">
+                <TrendingUp className="h-7 w-7 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold gradient-text">AI Job Market Analytics</h1>
+                <p className="text-sm text-muted-foreground">
+                  Analyzing <span className="text-primary font-semibold">{filteredData.length.toLocaleString()}</span> of <span className="font-semibold">{data.length.toLocaleString()}</span> jobs
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold gradient-text">AI Job Market Analytics</h1>
-              <p className="text-sm text-muted-foreground">
-                Analyzing <span className="text-primary font-semibold">{filteredData.length.toLocaleString()}</span> of <span className="font-semibold">{data.length.toLocaleString()}</span> jobs
-              </p>
-            </div>
+            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -141,6 +149,25 @@ const Index = () => {
                 icon={DollarSign}
               />
               <StatCard
+                title="Companies"
+                value={uniqueCompanies.toLocaleString()}
+                icon={Building2}
+              />
+              <StatCard
+                title="Locations"
+                value={uniqueLocations.toLocaleString()}
+                icon={MapPin}
+              />
+            </div>
+
+            {/* Additional Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatCard
+                title="Industries"
+                value={uniqueIndustries.toLocaleString()}
+                icon={Factory}
+              />
+              <StatCard
                 title="Remote Jobs"
                 value={`${Math.round((remoteJobs / filteredData.length) * 100)}%`}
                 icon={Users}
@@ -149,6 +176,11 @@ const Index = () => {
                 title="Top Skill"
                 value={topSkills[0]?.skill || 'N/A'}
                 icon={TrendingUp}
+              />
+              <StatCard
+                title="Top Education"
+                value={educationDist[0]?.education || 'N/A'}
+                icon={GraduationCap}
               />
             </div>
 

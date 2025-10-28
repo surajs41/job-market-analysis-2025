@@ -174,3 +174,31 @@ export const getSalaryByExperience = (data: JobData[]) => {
       return order.indexOf(a.level) - order.indexOf(b.level);
     });
 };
+
+export const getUniqueCompanies = (data: JobData[]): number => {
+  return new Set(data.map(job => job.company_name)).size;
+};
+
+export const getUniqueLocations = (data: JobData[]): number => {
+  return new Set(data.map(job => job.company_location)).size;
+};
+
+export const getUniqueIndustries = (data: JobData[]): number => {
+  return new Set(data.map(job => job.industry)).size;
+};
+
+export const getEducationDistribution = (data: JobData[]) => {
+  const distribution = new Map<string, number>();
+  data.forEach(job => {
+    const edu = job.education_required;
+    distribution.set(edu, (distribution.get(edu) || 0) + 1);
+  });
+  
+  return Array.from(distribution.entries())
+    .map(([education, count]) => ({
+      education,
+      count,
+      percentage: Math.round((count / data.length) * 100)
+    }))
+    .sort((a, b) => b.count - a.count);
+};
